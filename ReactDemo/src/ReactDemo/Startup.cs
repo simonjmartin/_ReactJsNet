@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using React.AspNet;
 
 namespace ReactDemo
 {
@@ -27,6 +29,9 @@ namespace ReactDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+
             // Add framework services.
             services.AddMvc();
         }
@@ -46,6 +51,20 @@ namespace ReactDemo
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // initialise ReactJS.NET. Must be before static files.
+            app.UseReact(config =>
+            {
+                /*
+                 * if you want to use server side rendering of React components, add all the necessary JavaScript files here.
+                 * This includes your components as well as all their dependencies. See http://reactjs.net/ for more info. e.g.
+                 * config.AddScript("~/Scripts/First.jsx").AddScript("~/Scripts/Second.jsx");
+                 *
+                 * If you use an extenal build tool (e.g. babel, webpack etc.) you can improve performance by disabling ReactJS.NET's
+                 * version of Babel and loading the pre-transpiled scripts e.g.
+                 * config.SetLoadBabel(false).AddScriptWithoutTransform("~/Scripts/bundle.server.js");
+                 */
+            });
 
             app.UseStaticFiles();
 
