@@ -49,5 +49,15 @@ namespace ReactDemo.Controllers
         {
             return Json(comments);
         }
+
+        [Route("comments/new")]
+        [HttpPost]
+        public ActionResult AddComment(CommentModel comment)
+        {
+            comment.Id = comments.Count + 1;
+            comments.Add(comment);
+
+            return Content("Success :)");
+        }
     }
 }
