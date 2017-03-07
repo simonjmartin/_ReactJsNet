@@ -40,7 +40,7 @@ namespace ReactDemo.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            return View();
+            return View(comments);
         }
 
         [Route("comments")]

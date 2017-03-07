@@ -1,10 +1,4 @@
-﻿var data = [
-    { id: 1, author: "Simon Martin", text: "Hello from me" },
-    { id: 2, author: "Someone Else", text: "Blah blah." },
-    { id: 3, author: "Mr Man", text: "This is *another* comment." }
-];
-
-var CommentList = React.createClass( {
+﻿var CommentList = React.createClass( {
     render: function () {
         var commentNodes = this.props.data.map( function ( comment ) {
             return (
@@ -54,9 +48,14 @@ var CommentForm = React.createClass( {
     }
 } );
 
+function createRemarkable() {
+    var remarkable = ( ( "undefined" !== typeof global ) && ( global.Remarkable ) ) ? global.Remarkable : window.Remarkable;
+    return new remarkable;
+}
+
 var Comment = React.createClass( {
     rawMarkup: function() {
-        var md = new Remarkable();
+        var md = createRemarkable();
         var rawMarkup = md.render(this.props.children.toString());
         return { __html: rawMarkup};
     },
@@ -101,10 +100,9 @@ var CommentBox = React.createClass( {
         xhr.send( data );
     },
     getInitialState: function () {
-        return { data: [] };
+        return { data: this.props.initialData };
     },
     componentDidMount: function () {
-        this.loadCommentsFromServer();
         window.setInterval( this.loadCommentsFromServer, this.props.pollInterval );
     },
     render: function () {
@@ -117,7 +115,3 @@ var CommentBox = React.createClass( {
       );
     }
 } );
-ReactDOM.render(
-  <CommentBox url="/comments" submitUrl="/comments/new" pollInterval={2000} />,
-  document.getElementById('content')
-);

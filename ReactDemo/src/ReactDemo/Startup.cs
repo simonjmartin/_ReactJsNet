@@ -64,6 +64,9 @@ namespace ReactDemo
                  * version of Babel and loading the pre-transpiled scripts e.g.
                  * config.SetLoadBabel(false).AddScriptWithoutTransform("~/Scripts/bundle.server.js");
                  */
+                config
+                   .AddScript("~/js/remarkable.min.js")
+                   .AddScript("~/js/tutorial.jsx");
             });
 
             app.UseStaticFiles();
