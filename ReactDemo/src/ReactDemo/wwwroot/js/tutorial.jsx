@@ -81,7 +81,14 @@ var CommentBox = React.createClass( {
         }.bind( this );
         xhr.send();
     },
-    handleCommentSubmit: function(comment){
+    handleCommentSubmit: function ( comment ) {
+        var comments = this.state.data;
+
+        // Optimisitically set an id on the new comment. It will be replaced by an id generated on the server.
+        comment.id = Date.now();
+        var newComments = comments.concat( [comment] );
+        this.setState( { data: newComments } );
+
         var data = new FormData();
         data.append( 'author', comment.author );
         data.append( 'text', comment.text );
